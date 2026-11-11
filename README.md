@@ -251,11 +251,11 @@ Key environment configuration variables in `.env`:
 
 | Variable | Default Value | Description |
 | :--- | :--- | :--- |
-| `SECRET_KEY` | *(Set a random 50+ character string)* | Django cryptographic signing secret |
-| `DEBUG` | `True` | Set to `False` in production environments |
-| `ALLOWED_HOSTS` | `127.0.0.1,localhost` | Comma-separated list of permitted hostnames |
-| `DATABASE_URL` | *(Optional)* | Database connection URI (for PostgreSQL deployment) |
-| `SECURE_SSL_REDIRECT` | `False` | Enforce HTTPS redirection in production |
+| `DJANGO_SECRET_KEY` | Local-development placeholder | Django signing secret; use a generated secret in production |
+| `DJANGO_DEBUG` | `True` | Set to `False` in production |
+| `DJANGO_ALLOWED_HOSTS` | `127.0.0.1,localhost` | Comma-separated permitted hostnames; Render's hostname is detected automatically |
+| `DATABASE_URL` | *(Optional)* | PostgreSQL connection URI; SQLite is used locally when unset |
+| `DJANGO_SECURE_SSL_REDIRECT` | `False` | Enforce HTTPS redirection in production |
 
 ### Database Setup and Seeding
 
@@ -282,6 +282,22 @@ Once running, navigate to:
 - **Storefront**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - **Staff Control Panel**: [http://127.0.0.1:8000/panel/](http://127.0.0.1:8000/panel/)
 - **Django Admin Portal**: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+
+---
+
+## Deploy on Render
+
+The repository includes a Render Blueprint in `render.yaml`. To deploy:
+
+1. Sign in to [Render](https://render.com/) and choose **New → Blueprint**.
+2. Connect `heisnature1/Godfred_Online_shop` and select its `main` branch.
+3. Review the Blueprint and choose **Apply**. Render creates the web service and PostgreSQL database, installs dependencies, collects static files, runs migrations, and seeds the sample catalog.
+4. Open the web service URL shown in the Render dashboard to view the storefront.
+5. To sign in as the store administrator, use username `super_admin` and the generated `DJANGO_SUPERUSER_PASSWORD` in the service's **Environment** settings. Keep this password private and rotate it after first login.
+
+The deployment does not create the predictable local `demo` account. `seed_data` requires explicit passwords before creating either account when `DJANGO_DEBUG=False`.
+
+The Blueprint uses Render's free plans for a quick preview. Free web services can spin down when idle, free PostgreSQL databases expire after their limited trial period, and uploaded profile images are not stored persistently. Upgrade the database before relying on live store data, and configure persistent/object storage before accepting user uploads.
 
 ---
 

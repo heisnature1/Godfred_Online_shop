@@ -122,7 +122,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-created_at', '-pk']
 
     def __str__(self):
         return f"Order #{self.pk} by {self.user.username}"

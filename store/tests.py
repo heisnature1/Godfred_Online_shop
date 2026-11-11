@@ -8,12 +8,17 @@ Covers:
   - Context processors (cart_count)
 """
 
+import os
 from decimal import Decimal
+from io import StringIO
+from unittest.mock import patch
 
-from django.test import TestCase, Client, RequestFactory
-from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib.sessions.backends.db import SessionStore
+from django.core.management import call_command
+from django.core.management.base import CommandError
+from django.test import TestCase, Client, RequestFactory, override_settings
+from django.urls import reverse
 
 from .models import Category, Product, Cart, CartItem, Order, OrderItem
 from .forms import CheckoutForm, ProductForm, CategoryForm
@@ -695,3 +700,22 @@ class StoreSecurityTest(TestCase):
         })
         self.assertTrue(form.is_valid(), form.errors)
 
+
+class SeedDataCommandTest(TestCase):
+
+    @override_settings(DEBUG=False)
+    @patch.dict(os.environ, {'DJANGO_SUPERUSER_PASSWORD': 'test-only-generated-password'})
+    def test_skip_demo_user_seeds_catalog_without_demo_account(self):
+        call_command('seed_data', skip_demo_user=True, stdout=StringIO())
+
+        self.assertTrue(User.objects.filter(username='super_admin').exists())
+        self.assertFalse(User.objects.filter(username='demo').exists())
+        self.assertGreater(Product.objects.count(), 0)
+
+    @override_settings(DEBUG=False)
+    @patch.dict(os.environ, {'DJANGO_SUPERUSER_PASSWORD': ''})
+    def test_production_seed_requires_admin_password(self):
+        with self.assertRaises(CommandError):
+            call_command('seed_data', skip_demo_user=True, stdout=StringIO())
+
+        self.assertFalse(User.objects.filter(username='super_admin').exists())

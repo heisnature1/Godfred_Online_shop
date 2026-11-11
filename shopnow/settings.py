@@ -1,15 +1,26 @@
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'shopnow-group4-secret-key-change-in-production-xyz123')
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    if not DEBUG:
+        raise ImproperlyConfigured('DJANGO_SECRET_KEY must be set when DJANGO_DEBUG is False.')
+    SECRET_KEY = 'django-insecure-local-development-key'
+
 allowed_hosts_raw = os.environ.get('DJANGO_ALLOWED_HOSTS')
-if allowed_hosts_raw:
-    ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_raw.split(',') if h.strip()]
+allowed_hosts = [h.strip() for h in (allowed_hosts_raw or '').split(',') if h.strip()]
+render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_hostname and render_hostname not in allowed_hosts:
+    allowed_hosts.append(render_hostname)
+if allowed_hosts:
+    ALLOWED_HOSTS = allowed_hosts
 else:
     ALLOWED_HOSTS = ['*'] if DEBUG else ['127.0.0.1', 'localhost']
 
@@ -27,6 +38,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -57,12 +69,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shopnow.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    DATABASES = {
+        'default': dj_database_url.parse(
+            database_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -79,6 +101,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -108,6 +131,8 @@ _ssl_env = os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False').lower() in ('tr
 SECURE_SSL_REDIRECT = (not DEBUG) and _ssl_env
 SESSION_COOKIE_SECURE = (not DEBUG) and _ssl_env
 CSRF_COOKIE_SECURE = (not DEBUG) and _ssl_env
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # HTTP Strict Transport Security (HSTS)
 _hsts_env = os.environ.get('DJANGO_SECURE_HSTS', 'False').lower() in ('true', '1')
@@ -147,4 +172,3 @@ LOGGING = {
         },
     },
 }
-

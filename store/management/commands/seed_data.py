@@ -1,6 +1,7 @@
 import os
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
+from django.conf import settings
 from store.models import Category, Product
 
 CATEGORIES = [
@@ -91,17 +92,43 @@ PRODUCTS = [
 class Command(BaseCommand):
     help = 'Seed the database with sample data for Godfred online shop'
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--skip-demo-user',
+            action='store_true',
+            help='Do not create the predictable local demo account.',
+        )
+
     def handle(self, *args, **kwargs):
         self.stdout.write(self.style.WARNING('Seeding database...'))
 
-        admin_password = os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'Aer!x1s#SuperAdm!n_2025')
-        demo_password = os.environ.get('DJANGO_DEMO_PASSWORD', 'ShopNow#DemoUser!2025')
+        admin_password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
+        demo_password = os.environ.get('DJANGO_DEMO_PASSWORD')
+        if (
+            not settings.DEBUG
+            and not User.objects.filter(username='super_admin').exists()
+            and not admin_password
+        ):
+            raise CommandError(
+                'Set DJANGO_SUPERUSER_PASSWORD before creating the production admin account.'
+            )
+        if (
+            not kwargs['skip_demo_user']
+            and not settings.DEBUG
+            and not User.objects.filter(username='demo').exists()
+            and not demo_password
+        ):
+            raise CommandError(
+                'Set DJANGO_DEMO_PASSWORD before creating the production demo account.'
+            )
 
         if not User.objects.filter(username='super_admin').exists():
+            admin_password = admin_password or 'Aer!x1s#SuperAdm!n_2025'
             User.objects.create_superuser('super_admin', 'admin@shopnow.com', admin_password)
             self.stdout.write(self.style.SUCCESS('+ Superuser: super_admin created.'))
 
-        if not User.objects.filter(username='demo').exists():
+        if not kwargs['skip_demo_user'] and not User.objects.filter(username='demo').exists():
+            demo_password = demo_password or 'ShopNow#DemoUser!2025'
             demo = User.objects.create_user(
                 username='demo', email='demo@shopnow.com',
                 password=demo_password, first_name='Kwame', last_name='Mensah'
