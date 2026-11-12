@@ -1,12 +1,12 @@
 #!/bin/bash
 # ════════════════════════════════════════════════════════════════
-# Godfred online shop — Setup Script (Linux/Mac)
+# Godfred's Fashion Shop — Setup Script (Linux/Mac)
 # ════════════════════════════════════════════════════════════════
 set -e
 
 echo ""
 echo "╔══════════════════════════════════════════╗"
-echo "║       Godfred online shop Setup        ║"
+echo "║     Godfred's Fashion Shop Setup       ║"
 echo "╚══════════════════════════════════════════╝"
 echo ""
 

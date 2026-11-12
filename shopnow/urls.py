@@ -4,9 +4,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from store import views as store_views
 
-admin.site.site_header = "Godfred online shop Admin"
-admin.site.site_title = "Godfred online shop Admin"
-admin.site.index_title = "Welcome to Godfred online shop Management"
+admin.site.site_header = "Godfred's Fashion Shop Admin"
+admin.site.site_title = "Godfred's Fashion Shop Admin"
+admin.site.index_title = "Welcome to Godfred's Fashion Shop Management"
 
 urlpatterns = [
     path('admin/', admin.site.urls),

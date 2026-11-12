@@ -20,7 +20,7 @@ def register_view(request):
             user = form.save()
             login(request, user)
             security_logger.info("New user registered: '%s' from IP %s", user.username, request.META.get('REMOTE_ADDR'))
-            messages.success(request, f'Welcome to Godfred online shop, {user.first_name or user.username}!')
+            messages.success(request, f"Welcome to Godfred's Fashion Shop, {user.first_name or user.username}!")
             return redirect('home')
     else:
         form = RegisterForm()

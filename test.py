@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Godfred online shop — Automated Test Suite Runner
+Godfred's Fashion Shop — Automated Test Suite Runner
 
 Usage:
     python test.py                  # Run all tests across the project
@@ -27,7 +27,7 @@ def run_tests():
     test_labels = sys.argv[1:] if len(sys.argv) > 1 else ["accounts", "store", "dashboard"]
 
     print("=" * 70)
-    print("  Godfred online shop — Running Test Suite")
+    print("  Godfred's Fashion Shop — Running Test Suite")
     print(f"  Target: {', '.join(test_labels)}")
     print("=" * 70)
 

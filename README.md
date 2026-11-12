@@ -1,6 +1,6 @@
 <div align="center">
 
-# Godfred online shop
+# Godfred's Fashion Shop
 
 **An Enterprise-Grade, Security-Hardened Full-Stack E-Commerce Engine**
 
@@ -51,7 +51,7 @@ A modern, robust e-commerce platform built with Django 4.2+, featuring atomic ch
 
 ## Project Overview
 
-**Godfred online shop** is an end-to-end digital commerce solution engineered with clean architectural patterns, robust concurrency management, and enterprise-grade defensive security. It solves the real-world operational challenges of e-commerce by providing:
+**Godfred's Fashion Shop** is an end-to-end digital commerce solution engineered with clean architectural patterns, robust concurrency management, and enterprise-grade defensive security. It solves the real-world operational challenges of e-commerce by providing:
 
 1. **A Customer Experience**: Lightning-fast product discovery with dynamic filtering, cart persistence across sessions, atomic order dispatching, and self-service account management.
 2. **A Staff Control Center**: A custom operations panel offering metrics, real-time revenue analytics, category hierarchy management, product lifecycle control, and order fulfillment state machines.
@@ -76,7 +76,7 @@ A modern, robust e-commerce platform built with Django 4.2+, featuring atomic ch
 The customer interface provides an intuitive shopping workflow with catalog filtering, real-time search, and product highlights.
 
 <div align="center">
-  <img src="screenshots/homepage_desktop.png" width="920" alt="Godfred online shop Homepage Desktop" />
+  <img src="screenshots/homepage_desktop.png" width="920" alt="Godfred's Fashion Shop Homepage Desktop" />
 </div>
 
 <br />
@@ -86,11 +86,11 @@ The customer interface provides an intuitive shopping workflow with catalog filt
     <tr>
       <td align="center" width="50%">
         <strong>Responsive Mobile Layout</strong><br />
-        <img src="screenshots/homepage_mobile.png" width="340" alt="Godfred online shop Mobile View" />
+        <img src="screenshots/homepage_mobile.png" width="340" alt="Godfred's Fashion Shop Mobile View" />
       </td>
       <td align="center" width="50%">
         <strong>Product Catalog & Filtering</strong><br />
-        <img src="screenshots/products_desktop.png" width="540" alt="Godfred online shop Product Catalog" />
+        <img src="screenshots/products_desktop.png" width="540" alt="Godfred's Fashion Shop Product Catalog" />
       </td>
     </tr>
   </table>
@@ -100,7 +100,7 @@ The customer interface provides an intuitive shopping workflow with catalog filt
 The staff panel equips administrators with store metrics, order processing controls, product catalogs, and user management.
 
 <div align="center">
-  <img src="screenshots/admin_dashboard.png" width="920" alt="Godfred online shop Staff Admin Panel" />
+  <img src="screenshots/admin_dashboard.png" width="920" alt="Godfred's Fashion Shop Staff Admin Panel" />
 </div>
 
 ---
@@ -164,9 +164,9 @@ flowchart TD
 
 ## Security Architecture & OWASP Top 10
 
-Godfred online shop enforces a defense-in-depth model across every tier of the application:
+Godfred's Fashion Shop enforces a defense-in-depth model across every tier of the application:
 
-| OWASP Vulnerability | Threat Description | Godfred online shop Defensive Countermeasure |
+| OWASP Vulnerability | Threat Description | Godfred's Fashion Shop Defensive Countermeasure |
 | :--- | :--- | :--- |
 | **A01: Broken Access Control** | Unauthorized privilege escalation or data tampering | `admin_required` decorator validates `is_authenticated` and `is_staff`. Superuser accounts have deletion immunity. Users cannot delete or demote their own account. Orders are strictly scoped to the requesting user. |
 | **A02: Cryptographic Failures** | Data in transit or rest exposure | Django PBKDF2 with SHA-256 password hashing. SSL/TLS headers ready (`SECURE_SSL_REDIRECT`, `SECURE_HSTS_SECONDS`, `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE`). |
@@ -312,7 +312,7 @@ The repository is configured for Vercel using the Python serverless runtime:
 
 ### Prerequisites
 
-Godfred online shop cannot use SQLite on Vercel (the filesystem is read-only and ephemeral at runtime). You need a managed PostgreSQL database. A convenient option is [Supabase](https://supabase.com/), which is already connected to this workspace:
+Godfred's Fashion Shop cannot use SQLite on Vercel (the filesystem is read-only and ephemeral at runtime). You need a managed PostgreSQL database. A convenient option is [Supabase](https://supabase.com/), which is already connected to this workspace:
 
 1. Create a Supabase project (free plan) and note the database connection string:
    `postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/postgres`
@@ -367,7 +367,7 @@ When populated using `python manage.py seed_data`, the local development databas
 
 ## Automated Test Suite
 
-Godfred online shop includes an automated test runner (`test.py`) with 160 test assertions covering security rules, transaction atomicity, edge conditions, and authorization logic.
+Godfred's Fashion Shop includes an automated test runner (`test.py`) with 160 test assertions covering security rules, transaction atomicity, edge conditions, and authorization logic.
 
 ```bash
 # Execute full suite across all applications
@@ -498,7 +498,7 @@ Aerixis-ShopNow/
 
 ## Production Deployment Checklist
 
-Before exposing Godfred online shop to public traffic, complete the following hardening steps:
+Before exposing Godfred's Fashion Shop to public traffic, complete the following hardening steps:
 
 - [ ] **Disable Debug Mode**: Set `DEBUG = False` in your production `.env`.
 - [ ] **Configure Allowed Hosts**: Specify your fully qualified domain names in `ALLOWED_HOSTS`.
@@ -515,7 +515,7 @@ Before exposing Godfred online shop to public traffic, complete the following ha
 
 ## Contributing
 
-Contributions to Godfred online shop are welcome. Please adhere to the following workflow:
+Contributions to Godfred's Fashion Shop are welcome. Please adhere to the following workflow:
 
 1. **Fork the Repository**: Create your personal branch from `main`.
 2. **Create a Feature Branch**:

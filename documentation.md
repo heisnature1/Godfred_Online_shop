@@ -1,4 +1,4 @@
-# Project Documentation — Godfred online shop
+# Project Documentation — Godfred's Fashion Shop
 
 ## Table of Contents
 - [Overview](#overview)
@@ -27,7 +27,7 @@
 ---
 
 ## Overview
-**Godfred online shop** is a full-stack e-commerce web platform built with Django. It provides a secure, streamlined shopping and store management experience. The platform supports browsing and filtering products, persistent cart management for both guests and authenticated users, secure checkout with atomic transactions, user profile administration, and a staff-only management dashboard for product, category, order, and customer operations.
+**Godfred's Fashion Shop** is a full-stack e-commerce web platform built with Django. It provides a secure, streamlined shopping and store management experience. The platform supports browsing and filtering products, persistent cart management for both guests and authenticated users, secure checkout with atomic transactions, user profile administration, and a staff-only management dashboard for product, category, order, and customer operations.
 
 ---
 
