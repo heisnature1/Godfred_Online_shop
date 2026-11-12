@@ -21,7 +21,6 @@
   ],
   "functions": {
     "api/index.py": {
-      "runtime": "python3.12",
       "memory": 1024,
       "maxDuration": 10
     }
