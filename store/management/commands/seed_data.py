@@ -11,6 +11,7 @@ CATEGORIES = [
     {"name": "Sports",        "icon": "fa-dumbbell",           "description": "Fitness & sportswear"},
     {"name": "Books",         "icon": "fa-book-open",          "description": "Textbooks & fiction"},
     {"name": "Beauty",        "icon": "fa-spray-can-sparkles", "description": "Skincare & makeup"},
+    {"name": "Footwear",      "icon": "fa-shoe-prints",        "description": "Slippers, crocs, sneakers, and more footwear"},
 ]
 
 PRODUCTS = [
@@ -86,11 +87,35 @@ PRODUCTS = [
      "price": 185.00, "sale_price": None, "stock": 25, "featured": True,
      "image_url": "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&h=600&fit=crop&auto=format",
      "description": "8-piece grooming kit: trimmer, comb, scissors, razor & skincare in a premium case."},
+    {"name": "Men's Leather Slippers", "category": "Footwear",
+     "price": 65.00, "sale_price": 45.00, "stock": 40, "featured": True,
+     "image_url": "https://images.unsplash.com/photo-1608375370149-2a809752903f?w=600&h=600&fit=crop&auto=format",
+     "description": "Comfortable genuine leather slippers for men. Soft indoor sole, perfect for home and casual wear."},
+    {"name": "Crocs Classic Clogs", "category": "Footwear",
+     "price": 55.00, "sale_price": None, "stock": 60, "featured": True,
+     "image_url": "https://images.unsplash.com/photo-1613757529256-2e12b9459216?w=600&h=600&fit=crop&auto=format",
+     "description": "Lightweight, water-friendly clogs with ventilation ports. Easy to clean and all-day comfortable."},
+    {"name": "Air Cushion Sneakers", "category": "Footwear",
+     "price": 85.00, "sale_price": 65.00, "stock": 50, "featured": False,
+     "image_url": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop&auto=format",
+     "description": "Trendy air-cushion sneakers with breathable mesh upper. Ideal for walking and daily comfort."},
+    {"name": "Running Sneakers", "category": "Footwear",
+     "price": 110.00, "sale_price": 90.00, "stock": 35, "featured": False,
+     "image_url": "https://images.unsplash.com/photo-1552346355-74f4948573c4?w=600&h=600&fit=crop&auto=format",
+     "description": "Performance running sneakers with responsive foam midsole and durable rubber outsole."},
+    {"name": "Leather Chelsea Boots", "category": "Footwear",
+     "price": 140.00, "sale_price": None, "stock": 25, "featured": False,
+     "image_url": "https://images.unsplash.com/photo-1608375370149-2a809752903f?w=600&h=600&fit=crop&auto=format",
+     "description": "Classic men's leather Chelsea boots with elastic side panels. Smart-casual and versatile."},
+    {"name": "Suede Loafers", "category": "Footwear",
+     "price": 95.00, "sale_price": 75.00, "stock": 30, "featured": False,
+     "image_url": "https://images.unsplash.com/photo-1604232762778-f12e99c799c4?w=600&h=600&fit=crop&auto=format",
+     "description": "Soft suede loafers for men. Slip-on design with padded insole. Great for office and outings."},
 ]
 
 
 class Command(BaseCommand):
-    help = 'Seed the database with sample data for Godfred online shop'
+    help = "Seed the database with sample data for Godfred's Fashion Shop"
 
     def add_arguments(self, parser):
         parser.add_argument(

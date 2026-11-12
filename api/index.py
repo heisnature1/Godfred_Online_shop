@@ -1,5 +1,5 @@
 """
-Vercel serverless entry point for the Godfred online shop Django app.
+Vercel serverless entry point for the Godfred's Fashion Shop Django app.
 
 Vercel's Python runtime auto-discovers a WSGI application called ``application``
 (or ``app``) in files such as ``api/index.py`` and wraps it as a serverless
