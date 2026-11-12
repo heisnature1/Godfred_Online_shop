@@ -22,3 +22,10 @@
 @media(max-width:768px){.hero.hero-3d{min-height:480px}.hero-copy.hero-overlay{min-height:480px;width:56%;padding:65px 0 75px 6%}.hero-stage{width:67%}.hero-controls{right:18px;bottom:18px;max-width:65%;gap:10px}.hero-interact{display:none}.stage-caption{right:18px;top:20px}.stage-caption span:last-child{display:none}}
 @media(max-width:550px){.hero.hero-3d{min-height:620px}.hero-backdrop:after{background:linear-gradient(180deg,rgba(35,5,11,.92),rgba(45,5,11,.65) 33%,transparent 65%),linear-gradient(0deg,#25060b99,transparent 30%)}.hero-copy.hero-overlay{width:100%;min-height:0;padding:40px 25px 0;justify-content:flex-start}.hero-overlay .hero-overline{margin-bottom:20px}.hero-overlay h1{font-size:45px;margin-bottom:12px}.hero-overlay .hero-description{font-size:13px;max-width:280px;margin-bottom:17px}.hero-stage{top:auto;bottom:0;width:100%;height:65%}.hero-fallback{top:18%;right:10%;width:80%}.stage-caption{top:20%;right:18px}.hero-controls{left:20px;right:20px;bottom:17px;max-width:none;justify-content:flex-end}.hero-control-actions{width:100%;justify-content:space-between}.hero-big-type{top:43%;font-size:32vw}.hero-orbit{top:37%;right:-30%;width:450px;height:450px}.orbit-two{top:32%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.product,.product-image img{transition:none}}
+
+/* Sidebar toggle: desktop collapses the layout; mobile uses a dismissible drawer. */
+.menu-toggle{display:grid;place-items:center;border:1px solid var(--border);background:white;border-radius:9px;width:38px;height:38px;color:var(--muted);cursor:pointer;flex-shrink:0}
+.menu-toggle:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+.sidebar[hidden],.sidebar-backdrop[hidden]{display:none!important}
+.sidebar-backdrop{display:none}
+@media(max-width:768px){.sidebar-backdrop:not([hidden]){display:block;position:fixed;inset:68px 0 0;background:rgba(17,24,39,.42);z-index:3}.sidebar{overflow-y:auto}}

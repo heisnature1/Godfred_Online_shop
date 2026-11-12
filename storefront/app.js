@@ -95,21 +95,35 @@
   });
   const menu = document.querySelector('.menu-toggle');
   const sidebar = document.getElementById('sidebar');
-  function closeMenu() {
-    sidebar.classList.remove('open');
-    menu.setAttribute('aria-expanded', 'false');
-    menu.setAttribute('aria-label', 'Open navigation');
-  }
-  menu.addEventListener('click', () => {
-    const open = sidebar.classList.toggle('open');
+  const backdrop = document.querySelector('.sidebar-backdrop');
+  const mobile = window.matchMedia('(max-width: 768px)');
+
+  function setMenu(open) {
+    sidebar.hidden = !open;
+    sidebar.classList.toggle('open', open);
+    backdrop.hidden = !open || !mobile.matches;
     menu.setAttribute('aria-expanded', String(open));
     menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+    menu.title = open ? 'Close navigation' : 'Open navigation';
+  }
+
+  // The navigation starts open on desktop, and closed on smaller screens.
+  setMenu(!mobile.matches);
+  mobile.addEventListener('change', event => setMenu(!event.matches));
+  menu.addEventListener('click', () => setMenu(sidebar.hidden));
+  backdrop.addEventListener('click', () => {
+    setMenu(false);
+    menu.focus();
   });
   sidebar.addEventListener('click', event => {
-    if (event.target.closest('a')) closeMenu();
+    if (mobile.matches && event.target.closest('a')) setMenu(false);
   });
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') closeMenu();
+    if (event.key === 'Escape' && !sidebar.hidden && !dialog.open) {
+      const focusWasInside = sidebar.contains(document.activeElement);
+      setMenu(false);
+      if (focusWasInside) menu.focus();
+    }
   });
   document.querySelector('.close-dialog').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
