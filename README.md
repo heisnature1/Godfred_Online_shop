@@ -301,6 +301,57 @@ The Blueprint uses Render's free plans for a quick preview. Free web services ca
 
 ---
 
+## Deploy on Vercel
+
+The repository is configured for Vercel using the Python serverless runtime:
+
+- `api/index.py` — WSGI entry point that Vercel's Python runtime invokes.
+- `vercel.json` — Routes, build commands, and the Python 3.12 function config.
+- `vercel-build.sh` — Runs `collectstatic` and `migrate` on every deploy.
+- `shopnow/settings.py` — Reads `VERCEL_URL` / `VERCEL_PROJECT_PRODUCTION_URL` into `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`, and disables persistent DB connections (`conn_max_age=0`) for serverless.
+
+### Prerequisites
+
+Godfred online shop cannot use SQLite on Vercel (the filesystem is read-only and ephemeral at runtime). You need a managed PostgreSQL database. A convenient option is [Supabase](https://supabase.com/), which is already connected to this workspace:
+
+1. Create a Supabase project (free plan) and note the database connection string:
+   `postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/postgres`
+2. Create a `.env` file locally from `.env.example` and fill in at least:
+   - `DATABASE_URL` — your Supabase PostgreSQL connection string
+   - `DJANGO_SECRET_KEY` — a long random string
+   - `DJANGO_DEBUG=False`
+   - `DJANGO_ALLOWED_HOSTS` — your Vercel domain(s), e.g. `godfred-online-shop.vercel.app`
+
+### Deployment steps
+
+1. Push this branch to GitHub.
+2. In the [Vercel dashboard](https://vercel.com/dashboard), choose **Add New → Project** and import `heisnature1/Godfred_Online_shop`.
+3. Vercel auto-detects the Python project. Use these settings:
+   - **Framework Preset**: Other
+   - **Build Command**: `bash vercel-build.sh`
+   - **Install Command**: `pip install --upgrade pip && pip install -r requirements.txt`
+   - **Output Directory**: leave blank
+   - **Root Directory**: `./` (the repository root)
+4. Under **Environment Variables**, add the variables from your `.env`:
+   - `DATABASE_URL` (Secret)
+   - `DJANGO_SECRET_KEY` (Secret)
+   - `DJANGO_DEBUG=False`
+   - `DJANGO_ALLOWED_HOSTS=<your vercel domain>,<custom domain if any>`
+   - `DJANGO_SECURE_SSL_REDIRECT=True`
+   - `DJANGO_SECURE_HSTS=True`
+   - `CSRF_TRUSTED_ORIGINS=https://<your vercel domain>`
+   - `DJANGO_SUPERUSER_PASSWORD` and `DJANGO_DEMO_PASSWORD`
+5. Click **Deploy**. On the first deploy, `vercel-build.sh` installs dependencies, collects static files with WhiteNoise, and applies migrations to Supabase.
+6. Open the deployed URL and sign in as `super_admin` with `DJANGO_SUPERUSER_PASSWORD`.
+
+### Important notes on serverless hosting
+
+- **Database**: `conn_max_age` is set to `0` so each short-lived function opens its own connection and does not exhaust Supabase's connection limit.
+- **Static & media files**: WhiteNoise serves `static/` and `staticfiles/` assets directly. User uploads (`Product.image`, `UserProfile.avatar`) are written to the local `media/` folder, which is **not persistent on Vercel**. For production, offload media to Supabase Storage or an S3-compatible bucket and serve files via `image_url` (already supported by the `Product` model).
+- **Preview deployments**: Every git push creates a preview deployment with its own hostname, which is added to `ALLOWED_HOSTS` automatically via `VERCEL_URL`.
+
+---
+
 ## Default Development Credentials
 
 When populated using `python manage.py seed_data`, the local development database includes pre-configured testing accounts:
