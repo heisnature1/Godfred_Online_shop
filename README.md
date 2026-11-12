@@ -337,7 +337,7 @@ Godfred online shop cannot use SQLite on Vercel (the filesystem is read-only and
    - `DJANGO_SECRET_KEY` (Secret)
    - `DJANGO_DEBUG=False`
    - `DJANGO_ALLOWED_HOSTS=<your vercel domain>,<custom domain if any>`
-   - `DJANGO_SECURE_SSL_REDIRECT=True`
+   - `DJANGO_SECURE_SSL_REDIRECT=False` (Vercel terminates SSL at the edge; Django must not redirect)
    - `DJANGO_SECURE_HSTS=True`
    - `CSRF_TRUSTED_ORIGINS=https://<your vercel domain>`
    - `DJANGO_SUPERUSER_PASSWORD` and `DJANGO_DEMO_PASSWORD`
