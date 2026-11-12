@@ -106,6 +106,15 @@ if database_url:
         )
     }
 else:
+    if not DEBUG:
+        raise ImproperlyConfigured(
+            'DATABASE_URL is required in production (DEBUG=False). '
+            'On Vercel, set DATABASE_URL in your project environment variables '
+            'to a PostgreSQL connection string (e.g. from Supabase: '
+            'postgresql://postgres:<password>@db.<project-ref>.supabase.co:5432/postgres). '
+            'SQLite is not supported on serverless platforms because the '
+            'filesystem is read-only at runtime.'
+        )
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
