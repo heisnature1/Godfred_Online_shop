@@ -254,7 +254,7 @@ Key environment configuration variables in `.env`:
 | `DJANGO_SECRET_KEY` | Local-development placeholder | Django signing secret; use a generated secret in production |
 | `DJANGO_DEBUG` | `True` | Set to `False` in production |
 | `DJANGO_ALLOWED_HOSTS` | `127.0.0.1,localhost` | Comma-separated permitted hostnames; Render's hostname is detected automatically |
-| `DATABASE_URL` | *(Optional)* | PostgreSQL connection URI; SQLite is used locally when unset |
+| `DATABASE_URL` | *(Required in production)* | PostgreSQL connection URI; SQLite is used locally only in development |
 | `DJANGO_SECURE_SSL_REDIRECT` | `False` | Enforce HTTPS redirection in production |
 
 ### Database Setup and Seeding
