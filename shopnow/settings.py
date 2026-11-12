@@ -16,13 +16,37 @@ if not SECRET_KEY:
 
 allowed_hosts_raw = os.environ.get('DJANGO_ALLOWED_HOSTS')
 allowed_hosts = [h.strip() for h in (allowed_hosts_raw or '').split(',') if h.strip()]
+
+# Render hostname (kept for backward compatibility with existing Render deploys)
 render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if render_hostname and render_hostname not in allowed_hosts:
     allowed_hosts.append(render_hostname)
+
+# Vercel hostnames. Each preview deployment gets its own hostname, so we pick up
+# VERCEL_URL and VERCEL_PROJECT_PRODUCTION_URL from the environment automatically.
+for _env in ('VERCEL_URL', 'VERCEL_PROJECT_PRODUCTION_URL'):
+    _value = os.environ.get(_env)
+    if _value:
+        _value = _value.replace('https://', '').replace('http://', '').strip().rstrip('/')
+        if _value and _value not in allowed_hosts:
+            allowed_hosts.append(_value)
+
 if allowed_hosts:
     ALLOWED_HOSTS = allowed_hosts
 else:
     ALLOWED_HOSTS = ['*'] if DEBUG else ['127.0.0.1', 'localhost']
+
+# CSRF trusted origins must include every production/preview origin that posts to the site.
+_csrf_trusted = []
+for _host in ALLOWED_HOSTS:
+    if _host in ('*', '127.0.0.1', 'localhost'):
+        continue
+    _csrf_trusted.append('https://' + _host)
+env_csrf = os.environ.get('CSRF_TRUSTED_ORIGINS')
+if env_csrf:
+    _csrf_trusted += [h.strip() for h in env_csrf.split(',') if h.strip()]
+if _csrf_trusted:
+    CSRF_TRUSTED_ORIGINS = _csrf_trusted
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -71,10 +95,13 @@ WSGI_APPLICATION = 'shopnow.wsgi.application'
 
 database_url = os.environ.get('DATABASE_URL')
 if database_url:
+    # On serverless platforms (Vercel) each function invocation is short-lived,
+    # so persistent connections must be disabled (conn_max_age=0). Django will
+    # open a fresh connection per request and reuse it within a single request.
     DATABASES = {
         'default': dj_database_url.parse(
             database_url,
-            conn_max_age=600,
+            conn_max_age=0,
             conn_health_checks=True,
         )
     }
