@@ -1,3 +1,11 @@
+> **Vercel frontend-only mode:** Vercel currently deploys the static catalog in
+> `storefront/` without Django, a database, migrations, cart, or checkout. Product
+> details and prices come from `storefront/products.js` (initially copied from the
+> Django seed data); changes there do not update the database. To preview locally,
+> run `python -m http.server 8000 --directory storefront`. For Vercel, leave
+> dashboard install/build/output overrides disabled so `vercel.json` is used.
+> The Django backend remains in the repository for a future integration.
+
 <div align="center">
 
 # Godfred's Fashion Shop
