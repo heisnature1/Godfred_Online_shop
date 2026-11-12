@@ -153,13 +153,26 @@ CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 
-# HTTPS / SSL enforcement in production
+# HTTPS / SSL enforcement in production.
+# NOTE: On Vercel (and similar platforms), SSL is terminated at the edge, so
+# Django should NOT perform HTTP->HTTPS redirects itself — that causes redirect
+# loops (Vercel already serves HTTPS). Keep DJANGO_SECURE_SSL_REDIRECT=False on
+# Vercel. SECURE_PROXY_SSL_HEADER tells Django the original request was HTTPS,
+# which secures the cookies without a redirect loop.
 _ssl_env = os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'False').lower() in ('true', '1')
 SECURE_SSL_REDIRECT = (not DEBUG) and _ssl_env
-SESSION_COOKIE_SECURE = (not DEBUG) and _ssl_env
-CSRF_COOKIE_SECURE = (not DEBUG) and _ssl_env
+
+# Trust the proxy's SSL header so Django knows requests are secure (Vercel,
+# Render, etc. terminate SSL at the edge and forward X-Forwarded-Proto).
+_behind_ssl_proxy = False
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    _behind_ssl_proxy = True
+
+# Cookie security: mark cookies Secure whenever behind an HTTPS-terminating
+# proxy, regardless of whether Django itself does SSL redirects.
+SESSION_COOKIE_SECURE = _behind_ssl_proxy
+CSRF_COOKIE_SECURE = _behind_ssl_proxy
 
 # HTTP Strict Transport Security (HSTS)
 _hsts_env = os.environ.get('DJANGO_SECURE_HSTS', 'False').lower() in ('true', '1')
