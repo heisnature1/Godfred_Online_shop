@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="/style.css">
   <script defer src="/products.js"></script>
   <script defer src="/app.js"></script>
+  <script type="module" src="/vendor/model-viewer.min.js"></script>
+  <script defer src="/hero.js"></script>
 </head>
 <body>
   <header class="topnav">
@@ -29,9 +31,18 @@
     </aside>
     <main class="main">
       <div class="content">
-        <section class="hero" aria-labelledby="hero-title">
-          <div class="hero-image"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1000&h=750&fit=crop&auto=format" alt="Red sneaker"></div>
-          <div class="hero-copy"><div class="hero-overline">WELCOME TO GODFRED'S</div><h1 id="hero-title">Great footwear.<br><span>Great prices.</span></h1><p>Find your next favorite pair, from everyday slippers to sneakers and boots.</p><div class="hero-tags"><span>SNEAKERS</span><span>SLIPPERS</span><span>BOOTS</span></div><a href="#shop" class="btn btn-primary"><i class="fa-solid fa-store" aria-hidden="true"></i> Explore the Shop <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
+        <section class="hero hero-3d" aria-labelledby="hero-title">
+          <div class="hero-backdrop" aria-hidden="true"><span class="hero-orbit orbit-one"></span><span class="hero-orbit orbit-two"></span><span class="hero-big-type">MOVE</span></div>
+          <div class="hero-stage" id="hero-stage">
+            <img class="hero-fallback" src="/images/nike-air-max-sneakers.jpg" alt="" aria-hidden="true">
+            <model-viewer id="hero-shoe" src="/models/materials-variants-shoe.glb" alt="Interactive 3D model of a sneaker. Drag to rotate it." camera-controls disable-zoom auto-rotate rotation-per-second="22deg" camera-orbit="30deg 75deg auto" interaction-prompt="none" shadow-intensity="1" exposure="1" loading="eager"></model-viewer>
+            <div class="stage-caption" aria-hidden="true"><span>01 / THE SNEAKER EDIT</span><span>DESIGNED TO MOVE ↗</span></div>
+          </div>
+          <div class="hero-copy hero-overlay"><div class="hero-overline">GODFRED'S FASHION SHOP</div><p class="hero-intro">FIND YOUR NEXT PAIR</p><h1 id="hero-title">Make every<br><span>step count.</span></h1><p class="hero-description">Discover footwear that brings comfort and confidence to every day.</p><a href="#shop" class="btn hero-cta">Explore the collection <span aria-hidden="true">↗</span></a></div>
+          <div class="hero-controls" id="hero-controls" hidden>
+            <div class="hero-interact"><span class="drag-icon" aria-hidden="true">↔</span><span>DRAG TO ROTATE</span></div>
+            <div class="hero-control-actions"><div class="color-options" role="group" aria-label="Shoe color"><span>COLOR</span><button type="button" class="swatch swatch-midnight" data-variant="midnight" aria-label="Midnight shoe" aria-pressed="true"></button><button type="button" class="swatch swatch-beach" data-variant="beach" aria-label="Beach shoe" aria-pressed="false"></button><button type="button" class="swatch swatch-street" data-variant="street" aria-label="Street shoe" aria-pressed="false"></button></div><button class="motion-toggle" type="button" aria-pressed="true">Pause rotation</button></div>
+          </div>
         </section>
         <div class="category-row"><a class="category-pill active" href="#shop"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> All Products</a><a class="category-pill" href="#shop"><i class="fa-solid fa-shoe-prints" aria-hidden="true"></i> Footwear</a><span class="catalog-label"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Prices in Ghana cedis</span></div>
         <section id="shop" class="shop" aria-labelledby="shop-title">
@@ -41,7 +52,7 @@
         </section>
         <section class="about" id="about"><div><span class="about-icon"><i class="fa-solid fa-shoe-prints" aria-hidden="true"></i></span><div><h2>Find your next favorite pair</h2><p>Explore our collection of sneakers, slippers and boots, all in one place.</p></div></div><a href="#shop" class="btn btn-primary">Browse footwear <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></section>
       </div>
-      <footer><span>© <span id="year"></span> <strong>Godfred's Fashion Shop</strong></span><span>Footwear for every step.</span></footer>
+      <footer><span>© <span id="year"></span> <strong>Godfred's Fashion Shop</strong></span><span>3D shoe: <a href="https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/MaterialsVariantsShoe">Shopify</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></span></footer>
     </main>
   </div>
   <dialog id="product-dialog" aria-labelledby="dialog-title"><button class="close-dialog" type="button" aria-label="Close product details">×</button><div id="dialog-content"></div></dialog>
