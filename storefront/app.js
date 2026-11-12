@@ -57,7 +57,12 @@
     const prices = element('div', 'prices', money(currentPrice(product)));
     if (product.sale_price != null) prices.append(element('del', '', money(product.price)));
     meta.append(info, prices);
-    card.append(picture, meta);
+    const footer = element('div', 'product-footer');
+    const details = element('button', '', 'View details');
+    details.type = 'button';
+    details.addEventListener('click', () => showDetails(product));
+    footer.append(details);
+    card.append(picture, meta, footer);
     return card;
   }
   function render() {
@@ -76,6 +81,36 @@
   if (params.get('sort') === 'price') sort.value = 'low';
   search.addEventListener('input', render);
   sort.addEventListener('change', render);
+  const navSearch = document.querySelector('.nav-search');
+  const navInput = document.getElementById('nav-search-input');
+  navSearch.addEventListener('submit', event => {
+    event.preventDefault();
+    search.value = navInput.value;
+    render();
+    document.getElementById('shop').scrollIntoView();
+  });
+  document.getElementById('deals-link').addEventListener('click', () => {
+    sort.value = 'low';
+    render();
+  });
+  const menu = document.querySelector('.menu-toggle');
+  const sidebar = document.getElementById('sidebar');
+  function closeMenu() {
+    sidebar.classList.remove('open');
+    menu.setAttribute('aria-expanded', 'false');
+    menu.setAttribute('aria-label', 'Open navigation');
+  }
+  menu.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    menu.setAttribute('aria-expanded', String(open));
+    menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  });
+  sidebar.addEventListener('click', event => {
+    if (event.target.closest('a')) closeMenu();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeMenu();
+  });
   document.querySelector('.close-dialog').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
   document.getElementById('year').textContent = new Date().getFullYear();
